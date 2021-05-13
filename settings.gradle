@@ -1,0 +1,2 @@
+rootProject.name = "InfiniteImgur"
+include ':app'
