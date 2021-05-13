@@ -1,57 +1,64 @@
-package prism6.com.infiniteimgur.data
+package prism6.com.infiniteimgur.model
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 class Gallery(
-    val data: List<Data>,
+    val data: List<GalleryModel>,
     val status: Int,
     val success: Boolean
 )
 
-data class Data(
-    val animated: Boolean,
-    val bandwidth: Long,
-    val comment_count: Int,
-    val cover: String,
-    val cover_height: Int,
-    val cover_width: Int,
-    val datetime: Int,
+@Entity(tableName = "gallery")
+data class GalleryModel(
+//    val animated: Boolean,
+//    val bandwidth: Long,
+//    val comment_count: Int,
+//    val cover: String,
+//    val cover_height: Int,
+//    val cover_width: Int,
+//    val datetime: Int,
     val description: Any,
-    val downs: Int,
-    val edited: Int,
-    val favorite: Boolean,
-    val favorite_count: Int,
-    val gifv: String,
-    val has_sound: Boolean,
-    val height: Int,
+//    val downs: Int,
+//    val edited: Int,
+//    val favorite: Boolean,
+//    val favorite_count: Int,
+//    val gifv: String,
+//    val has_sound: Boolean,
+//    val height: Int,
     val hls: String,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     val id: String,
 //    val images: List<Image>,
-    val images_count: Int,
-    val in_gallery: Boolean,
-    val in_most_viral: Boolean,
-    val include_album_ads: Boolean,
-    val is_ad: Boolean,
-    val is_album: Boolean,
-    val layout: String,
+//    val images_count: Int,
+//    val in_gallery: Boolean,
+//    val in_most_viral: Boolean,
+//    val include_album_ads: Boolean,
+//    val is_ad: Boolean,
+//    val is_album: Boolean,
+//    val layout: String,
     val link: String,
-    val looping: Boolean,
-    val mp4: String,
-    val mp4_size: Int,
-    val nsfw: Boolean,
-    val points: Int,
-    val privacy: String,
-    val processing: ProcessingX,
-    val score: Int,
-    val section: String,
-    val size: Int,
-    val tags: List<Tag>,
-    val title: String,
-    val topic: Any,
-    val topic_id: Int,
-    val type: String,
-    val ups: Int,
-    val views: Int,
-    val vote: Any,
-    val width: Int
+//    val looping: Boolean,
+//    val mp4: String,
+//    val mp4_size: Int,
+//    val nsfw: Boolean,
+//    val points: Int,
+//    val privacy: String,
+//    val processing: ProcessingX,
+//    val score: Int,
+//    val section: String,
+//    val size: Int,
+//    val tags: List<Tag>,
+//    val title: String,
+//    val topic: Any,
+//    val topic_id: Int,
+//    val type: String,
+//    val ups: Int,
+//    val views: Int,
+//    val vote: Any,
+//    val width: Int
 )
 
 data class Image(

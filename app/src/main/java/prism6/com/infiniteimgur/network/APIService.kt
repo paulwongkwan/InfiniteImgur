@@ -1,7 +1,7 @@
 package prism6.com.infiniteimgur.network
 
 import io.reactivex.rxjava3.core.Observable
-import prism6.com.infiniteimgur.data.Gallery
+import prism6.com.infiniteimgur.model.Gallery
 import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.Path

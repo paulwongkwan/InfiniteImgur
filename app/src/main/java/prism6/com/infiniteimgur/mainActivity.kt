@@ -102,6 +102,10 @@ class mainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        fetchGallery()
+    }
+
+    fun fetchGallery() {
         apiService.gallery(Header.header(), "hot", "viral", 0)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
