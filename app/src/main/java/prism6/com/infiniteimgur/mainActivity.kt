@@ -8,20 +8,18 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
-import prism6.com.infiniteimgur.component.DaggerNetworkComponent
+import androidx.lifecycle.Observer
+import prism6.com.infiniteimgur.component.DaggerActivityComponent
 import prism6.com.infiniteimgur.databinding.ActivityFullscreenBinding
-import prism6.com.infiniteimgur.network.APIService
-import prism6.com.infiniteimgur.network.Header
-import javax.inject.Inject
+import prism6.com.infiniteimgur.uilitiy.Resource
+import prism6.com.infiniteimgur.viewmodel.GalleryViewModel
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-
 
 
 class mainActivity : AppCompatActivity() {
@@ -31,7 +29,7 @@ class mainActivity : AppCompatActivity() {
     private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler()
 
-    @Inject lateinit var apiService: APIService
+    val galleryViewModel: GalleryViewModel by viewModels()
 
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
@@ -71,6 +69,7 @@ class mainActivity : AppCompatActivity() {
             else -> {
             }
         }
+        fetchGallery()
         false
     }
 
@@ -78,7 +77,7 @@ class mainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        DaggerNetworkComponent.create().inject(this)
+        DaggerActivityComponent.create().inject(this)
 
         binding = ActivityFullscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -101,19 +100,16 @@ class mainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         fetchGallery()
     }
 
     fun fetchGallery() {
-        apiService.gallery(Header.header(), "hot", "viral", 0)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Log.e("gallery", it.toString())
-            },{
-                it.printStackTrace()
-            })
+        galleryViewModel.gallerys.observe(this, Observer {
+            if (it.status == Resource.Status.SUCCESS)
+                for(x in it.data!!){
+                    Log.e("G", x.link)
+                }
+        })
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

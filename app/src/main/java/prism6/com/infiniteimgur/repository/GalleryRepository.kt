@@ -1,22 +1,39 @@
 package prism6.com.infiniteimgur.repository
 
-import android.content.Context
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.CoroutineScope
-import prism6.com.infiniteimgur.model.GalleryModel
-import prism6.com.infiniteimgur.room.GalleryDB
+import androidx.lifecycle.liveData
+import androidx.lifecycle.map
+import kotlinx.coroutines.Dispatchers
+import prism6.com.infiniteimgur.uilitiy.Resource
+import javax.inject.Inject
 
-class GalleryRepository {
-    companion object {
-
-        var galleryDB: GalleryDB? = null
-
-        var galleryModel: LiveData<GalleryModel>? = null
-
-        fun initializeDB(context: Context) : GalleryDB {
-            return GalleryDB.getDataseClient(context)
-        }
-
-    }
-
+class GalleryRepository @Inject constructor(
+    private val galleryRemoteRepository: GalleryRemoteRepository,
+    private val galleryLocalRepository: GalleryLocalRepository
+) {
+    fun getGallerys() = get(
+        db = { galleryLocalRepository.getGallerys() },
+        call = { galleryRemoteRepository.getGallerys() },
+        result = { galleryLocalRepository.insertAll(it.data) }
+    )
 }
+
+fun <T, A> get(
+    db: () -> LiveData<T>,
+    call: suspend () -> Resource<A>,
+    result: suspend (A) -> Unit
+): LiveData<Resource<T>> =
+    liveData(Dispatchers.IO) {
+        emit(Resource.loading())
+        val source = db.invoke().map { Resource.success(it) }
+        emitSource(source)
+
+        val responseStatus = call.invoke()
+        if (responseStatus.status == Resource.Status.SUCCESS) {
+            result(responseStatus.data!!)
+
+        } else if (responseStatus.status == Resource.Status.ERROR) {
+            emit(Resource.error(responseStatus.message!!))
+            emitSource(source)
+        }
+    }

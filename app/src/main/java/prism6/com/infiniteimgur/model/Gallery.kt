@@ -19,7 +19,7 @@ data class GalleryModel(
 //    val cover_height: Int,
 //    val cover_width: Int,
 //    val datetime: Int,
-    val description: Any,
+//    val description: String,
 //    val downs: Int,
 //    val edited: Int,
 //    val favorite: Boolean,
@@ -27,9 +27,10 @@ data class GalleryModel(
 //    val gifv: String,
 //    val has_sound: Boolean,
 //    val height: Int,
-    val hls: String,
+//    val hls: String,
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "key")
+    val key: Int,
     val id: String,
 //    val images: List<Image>,
 //    val images_count: Int,
@@ -51,7 +52,7 @@ data class GalleryModel(
 //    val section: String,
 //    val size: Int,
 //    val tags: List<Tag>,
-//    val title: String,
+    val title: String,
 //    val topic: Any,
 //    val topic_id: Int,
 //    val type: String,

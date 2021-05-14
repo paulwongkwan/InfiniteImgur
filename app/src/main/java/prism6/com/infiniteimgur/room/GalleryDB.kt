@@ -2,13 +2,14 @@ package prism6.com.infiniteimgur.room
 
 import android.content.Context
 import androidx.room.Database
-import androidx.room.*
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import prism6.com.infiniteimgur.model.GalleryModel
 
 @Database(entities = arrayOf(GalleryModel::class), version = 1, exportSchema = false)
 abstract class GalleryDB : RoomDatabase() {
 
-    abstract fun galleryDao() : DAOAccess
+    abstract fun galleryDao() : GalleryDAO
 
     companion object {
 
