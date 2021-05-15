@@ -20,12 +20,12 @@ class GalleryLocalRepository @Inject constructor() {
         return GalleryDB.getDataseClient(context)
     }
 
-    fun insertData(galleryModel: GalleryModel) {
+    fun insert(galleryModel: GalleryModel) {
 
         galleryDB = initializeDB(context)
 
         CoroutineScope(IO).launch {
-            galleryDB!!.galleryDao().InsertData(galleryModel)
+            galleryDB!!.galleryDao().Insert(galleryModel)
         }
     }
 

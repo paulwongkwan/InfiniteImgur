@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import prism6.com.infiniteimgur.model.GalleryModel
+import prism6.com.infiniteimgur.model.Image
 
 @Database(entities = arrayOf(GalleryModel::class), version = 1, exportSchema = false)
 abstract class GalleryDB : RoomDatabase() {

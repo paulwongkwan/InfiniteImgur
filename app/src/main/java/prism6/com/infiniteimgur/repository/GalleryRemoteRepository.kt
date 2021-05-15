@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @Module
 class GalleryRemoteRepository @Inject constructor() {
-    suspend fun getGallerys() = getResult { apiService.gallery(Header.header(), "hot", "viral", 0) }
+    suspend fun getGallerys() = getResult { apiService.gallery(Header.header(), "hot", "viral", 0, true) }
 
     val apiService: APIService = mApplication.instance.apiService
 

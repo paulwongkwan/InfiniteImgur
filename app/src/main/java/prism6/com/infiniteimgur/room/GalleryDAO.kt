@@ -1,17 +1,15 @@
 package prism6.com.infiniteimgur.room
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import prism6.com.infiniteimgur.model.GalleryModel
+import prism6.com.infiniteimgur.model.Image
 
 @Dao
 interface GalleryDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun InsertData(galleryModel: GalleryModel)
+    suspend fun Insert(galleryModel: GalleryModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun InsertAll(galleryModels: List<GalleryModel>)
@@ -21,5 +19,4 @@ interface GalleryDAO {
 
     @Query("SELECT * FROM gallery")
     fun getGallerys() : LiveData<List<GalleryModel>>
-
 }

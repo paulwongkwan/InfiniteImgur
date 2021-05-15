@@ -1,7 +1,6 @@
 package prism6.com.infiniteimgur.module
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -21,7 +20,7 @@ class NetworkModule {
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.imgur.com")
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .addConverterFactory(GsonConverterFactory.create())
             .client(provideOkHttpClient())
             .build()
     }

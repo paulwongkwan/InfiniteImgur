@@ -3,14 +3,16 @@ package prism6.com.infiniteimgur
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
+import prism6.com.infiniteimgur.adapter.MainGalleryAdapter
 import prism6.com.infiniteimgur.component.DaggerActivityComponent
 import prism6.com.infiniteimgur.databinding.ActivityFullscreenBinding
 import prism6.com.infiniteimgur.uilitiy.Resource
@@ -25,11 +27,15 @@ import prism6.com.infiniteimgur.viewmodel.GalleryViewModel
 class mainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFullscreenBinding
-    private lateinit var fullscreenContent: TextView
+    private lateinit var fullscreenContent: RecyclerView
     private lateinit var fullscreenContentControls: LinearLayout
+    private lateinit var emptyText: TextView
+    private lateinit var loadingBox: FrameLayout
     private val hideHandler = Handler()
 
     val galleryViewModel: GalleryViewModel by viewModels()
+
+    private lateinit var adapter: MainGalleryAdapter
 
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
@@ -88,28 +94,43 @@ class mainActivity : AppCompatActivity() {
 
         // Set up the user interaction to manually show or hide the system UI.
         fullscreenContent = binding.fullscreenContent
-        fullscreenContent.setOnClickListener { toggle() }
 
         fullscreenContentControls = binding.fullscreenContentControls
+
+        loadingBox = binding.loadingBox
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         binding.dummyButton.setOnTouchListener(delayHideTouchListener)
+
+        fetchGallery()
     }
 
     override fun onResume() {
         super.onResume()
-        fetchGallery()
+//        fetchGallery()
     }
 
     fun fetchGallery() {
         galleryViewModel.gallerys.observe(this, Observer {
-            if (it.status == Resource.Status.SUCCESS)
-                for(x in it.data!!){
-                    Log.e("G", x.link)
-                }
+            if (it.status == Resource.Status.SUCCESS) {
+                galleryViewModel.isLoading.value = true
+                adapter = MainGalleryAdapter(galleryViewModel)
+                fullscreenContent.adapter = adapter
+                adapter.notifyDataSetChanged()
+            }
         })
+
+        galleryViewModel.isLoading.observe(this,
+            { isLoading ->
+                if (isLoading != null) {
+                    if (isLoading) {
+                        // hide your progress bar
+                        loadingBox.visibility = View.GONE
+                    }
+                }
+            })
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
