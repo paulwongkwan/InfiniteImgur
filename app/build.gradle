@@ -80,4 +80,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
+    def big_version = "1.8.0"
+    implementation "com.github.piasy:BigImageViewer:$big_version"
+    implementation "com.github.piasy:GlideImageLoader:$big_version"
+    implementation "com.github.piasy:ProgressPieIndicator:$big_version"
+    implementation "com.github.piasy:GlideImageViewFactory:$big_version"
 }

@@ -1,7 +1,12 @@
 package prism6.com.infiniteimgur.viewmodel
 
+import android.app.Activity
+import android.content.ContextWrapper
+import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.BindingAdapter
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -12,6 +17,7 @@ import prism6.com.infiniteimgur.mApplication
 import prism6.com.infiniteimgur.model.GalleryModel
 import prism6.com.infiniteimgur.repository.GalleryRepository
 import prism6.com.infiniteimgur.uilitiy.Resource
+import prism6.com.infiniteimgur.view.ImageDialog
 
 
 class GalleryViewModel : ViewModel() {
@@ -21,6 +27,12 @@ class GalleryViewModel : ViewModel() {
 
     val empty: LiveData<Boolean> = Transformations.map(gallerys) {
         it.data.isNullOrEmpty()
+    }
+
+    fun click(view: View, url:String) {
+        val context: ContextWrapper = view.context as ContextWrapper
+        val activity: AppCompatActivity = context.baseContext as AppCompatActivity
+        ImageDialog.newInstance(url).show(activity.supportFragmentManager, "Viewer")
     }
 
     companion object {
