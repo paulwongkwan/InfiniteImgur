@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import prism6.com.infiniteimgur.adapter.MainGalleryAdapter
-import prism6.com.infiniteimgur.component.DaggerActivityComponent
 import prism6.com.infiniteimgur.databinding.ActivityFullscreenBinding
 import prism6.com.infiniteimgur.uilitiy.Resource
 import prism6.com.infiniteimgur.viewmodel.GalleryViewModel
@@ -82,8 +81,6 @@ class mainActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        DaggerActivityComponent.create().inject(this)
 
         binding = ActivityFullscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)

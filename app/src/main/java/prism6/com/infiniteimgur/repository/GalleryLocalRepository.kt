@@ -10,7 +10,7 @@ import prism6.com.infiniteimgur.model.GalleryModel
 import prism6.com.infiniteimgur.room.GalleryDB
 import javax.inject.Inject
 
-class GalleryLocalRepository @Inject constructor() {
+class GalleryLocalRepository constructor() {
 
     var galleryDB: GalleryDB? = null
 

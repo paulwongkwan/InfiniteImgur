@@ -10,7 +10,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @Module
-class GalleryRemoteRepository @Inject constructor() {
+class GalleryRemoteRepository constructor() {
     suspend fun getGallerys() = getResult { apiService.gallery(Header.header(), "hot", "viral", 0, true) }
 
     val apiService: APIService = mApplication.instance.apiService

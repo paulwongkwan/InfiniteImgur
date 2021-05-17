@@ -17,18 +17,18 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.imgur.com")
             .addConverterFactory(GsonConverterFactory.create())
-            .client(provideOkHttpClient())
+            .client(okHttpClient)
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideApi(): APIService {
-        return provideRetrofit().create(APIService::class.java)
+    fun provideApi(retrofit: Retrofit): APIService {
+        return retrofit.create(APIService::class.java)
     }
 
     @Singleton
