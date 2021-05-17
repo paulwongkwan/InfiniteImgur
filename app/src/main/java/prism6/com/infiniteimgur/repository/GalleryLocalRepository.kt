@@ -33,8 +33,12 @@ class GalleryLocalRepository constructor() {
 
         galleryDB = initializeDB(context)
 
+        var newGalleryList = galleryModels
+            .filter { !it.images.isNullOrEmpty() }
+            .filter { it.images!![0].type!!.contains("image/") }
+
         CoroutineScope(IO).launch {
-            galleryDB!!.galleryDao().InsertAll(galleryModels)
+            galleryDB!!.galleryDao().InsertAll(newGalleryList)
         }
     }
 
