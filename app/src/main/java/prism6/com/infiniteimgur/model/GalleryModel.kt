@@ -1,6 +1,9 @@
 package prism6.com.infiniteimgur.model
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "gallery")

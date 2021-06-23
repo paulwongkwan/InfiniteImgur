@@ -85,4 +85,10 @@ dependencies {
     implementation "com.github.piasy:GlideImageLoader:$big_version"
     implementation "com.github.piasy:ProgressPieIndicator:$big_version"
     implementation "com.github.piasy:GlideImageViewFactory:$big_version"
+
+    def paging_version = "3.0.0"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    testImplementation "androidx.paging:paging-common-ktx:$paging_version"
+    implementation "androidx.paging:paging-rxjava3:$paging_version"
+
 }

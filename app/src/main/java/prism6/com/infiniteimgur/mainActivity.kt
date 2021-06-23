@@ -101,24 +101,6 @@ class mainActivity : AppCompatActivity() {
         // while interacting with the UI.
         binding.dummyButton.setOnTouchListener(delayHideTouchListener)
 
-        fetchGallery()
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        fetchGallery()
-    }
-
-    fun fetchGallery() {
-        galleryViewModel.gallerys.observe(this, Observer {
-            if (it.status == Resource.Status.SUCCESS) {
-                galleryViewModel.isLoading.value = true
-                adapter = MainGalleryAdapter(galleryViewModel)
-                fullscreenContent.adapter = adapter
-                adapter.notifyDataSetChanged()
-            }
-        })
-
         galleryViewModel.isLoading.observe(this,
             { isLoading ->
                 if (isLoading != null) {
@@ -128,6 +110,40 @@ class mainActivity : AppCompatActivity() {
                     }
                 }
             })
+
+        galleryViewModel.galleryList.observe(this, Observer {
+            if (!::adapter.isInitialized) {
+                adapter = MainGalleryAdapter(galleryViewModel)
+                fullscreenContent.adapter = adapter
+                fullscreenContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+
+                        if(!recyclerView.canScrollVertically(1)){
+                            galleryViewModel.update()
+                        }
+                    }
+                })
+            }
+        })
+
+        fetchGallery()
+    }
+
+    fun fetchGallery() {
+        galleryViewModel.isLoading.value = false
+        galleryViewModel.galleryPage.observe(this, Observer {
+            if (it.status == Resource.Status.SUCCESS) {
+                galleryViewModel.isLoading.value = true
+                val dataSize = it.data!!.size
+                if(dataSize > 0) {
+                    val size = galleryViewModel.galleryList.value?.size
+                    galleryViewModel.galleryList.value?.addAll(it.data!!)
+                    adapter.notifyItemRangeInserted(size!!, dataSize)
+                    galleryViewModel.page++
+                }
+            }
+        })
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

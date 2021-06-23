@@ -1,9 +1,11 @@
 package prism6.com.infiniteimgur.room
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import prism6.com.infiniteimgur.model.GalleryModel
-import prism6.com.infiniteimgur.model.Image
 
 @Dao
 interface GalleryDAO {
@@ -19,4 +21,7 @@ interface GalleryDAO {
 
     @Query("SELECT * FROM gallery")
     fun getGallerys() : LiveData<List<GalleryModel>>
+
+    @Query("DELETE FROM gallery")
+    suspend fun clearAll()
 }

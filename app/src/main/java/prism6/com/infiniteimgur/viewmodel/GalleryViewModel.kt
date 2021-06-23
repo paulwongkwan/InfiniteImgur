@@ -1,12 +1,10 @@
 package prism6.com.infiniteimgur.viewmodel
 
-import android.app.Activity
 import android.content.ContextWrapper
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.BindingAdapter
-import androidx.fragment.app.findFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -18,15 +16,28 @@ import prism6.com.infiniteimgur.model.GalleryModel
 import prism6.com.infiniteimgur.repository.GalleryRepository
 import prism6.com.infiniteimgur.uilitiy.Resource
 import prism6.com.infiniteimgur.view.ImageDialog
+import java.util.concurrent.CopyOnWriteArrayList
 
 
 class GalleryViewModel : ViewModel() {
     private val repository: GalleryRepository = mApplication.instance.repository
     var gallerys: LiveData<Resource<List<GalleryModel>>> = repository.getGallerys()
+    var galleryPage: LiveData<Resource<List<GalleryModel>>>
     var isLoading = MutableLiveData<Boolean>()
+    var page = 0
+    var galleryList = MutableLiveData<CopyOnWriteArrayList<GalleryModel>>(CopyOnWriteArrayList())
 
     val empty: LiveData<Boolean> = Transformations.map(gallerys) {
         it.data.isNullOrEmpty()
+    }
+
+    init {
+        repository.clearLocalCache()
+        galleryPage = repository.getGallerys(page)
+    }
+
+    fun update(){
+        galleryPage = repository.getGallerys(page)
     }
 
     fun click(view: View, url:String) {

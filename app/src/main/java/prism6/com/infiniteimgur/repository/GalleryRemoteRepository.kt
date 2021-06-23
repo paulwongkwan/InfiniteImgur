@@ -7,11 +7,11 @@ import prism6.com.infiniteimgur.network.APIService
 import prism6.com.infiniteimgur.network.Header
 import prism6.com.infiniteimgur.uilitiy.Resource
 import retrofit2.Response
-import javax.inject.Inject
 
 @Module
 class GalleryRemoteRepository constructor() {
     suspend fun getGallerys() = getResult { apiService.gallery(Header.header(), "hot", "viral", 0, true) }
+    suspend fun getGallerys(page: Int) = getResult { apiService.gallery(Header.header(), "hot", "viral", page, true) }
 
     val apiService: APIService = mApplication.instance.apiService
 

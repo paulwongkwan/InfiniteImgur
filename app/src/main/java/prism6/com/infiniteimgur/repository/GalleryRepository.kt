@@ -16,6 +16,16 @@ class GalleryRepository @Inject constructor(
         call = { galleryRemoteRepository.getGallerys() },
         result = { galleryLocalRepository.insertAll(it.data) }
     )
+
+    fun getGallerys(page : Int) = get(
+        db = { galleryLocalRepository.getGallerys() },
+        call = { galleryRemoteRepository.getGallerys(page) },
+        result = { galleryLocalRepository.insertAll(it.data) }
+    )
+
+    fun clearLocalCache(){
+        galleryLocalRepository.removeAll()
+    }
 }
 
 fun <T, A> get(
@@ -31,7 +41,6 @@ fun <T, A> get(
         val responseStatus = call.invoke()
         if (responseStatus.status == Resource.Status.SUCCESS) {
             result(responseStatus.data!!)
-
         } else if (responseStatus.status == Resource.Status.ERROR) {
             emit(Resource.error(responseStatus.message!!))
             emitSource(source)

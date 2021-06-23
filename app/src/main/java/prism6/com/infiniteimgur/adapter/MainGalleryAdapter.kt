@@ -9,7 +9,7 @@ import prism6.com.infiniteimgur.viewmodel.GalleryViewModel
 class MainGalleryAdapter(private val viewModel: GalleryViewModel) :
     RecyclerView.Adapter<GalleryViewHolder>() {
 
-    var list: List<GalleryModel>? = viewModel.gallerys.value?.data
+    var list: List<GalleryModel>? = viewModel.galleryList.value
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
         return GalleryViewHolder.from(parent)

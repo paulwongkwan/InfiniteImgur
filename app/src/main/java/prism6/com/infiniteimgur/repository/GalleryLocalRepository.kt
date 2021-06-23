@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import prism6.com.infiniteimgur.mApplication
 import prism6.com.infiniteimgur.model.GalleryModel
 import prism6.com.infiniteimgur.room.GalleryDB
-import javax.inject.Inject
 
 class GalleryLocalRepository constructor() {
 
@@ -47,6 +46,14 @@ class GalleryLocalRepository constructor() {
         galleryDB = initializeDB(context)
 
         return galleryDB!!.galleryDao().getGalleryDetails(id)
+    }
+
+    fun removeAll(){
+        galleryDB = initializeDB(context)
+
+        CoroutineScope(IO).launch {
+            galleryDB!!.galleryDao().clearAll()
+        }
     }
 
     fun getGallerys(): LiveData<List<GalleryModel>> {
