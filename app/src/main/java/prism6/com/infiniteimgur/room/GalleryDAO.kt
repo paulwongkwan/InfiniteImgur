@@ -22,6 +22,9 @@ interface GalleryDAO {
     @Query("SELECT * FROM gallery")
     fun getGallerys() : LiveData<List<GalleryModel>>
 
+    @Query("SELECT * FROM gallery WHERE page = :page")
+    fun getGallerys(page: Int) : LiveData<List<GalleryModel>>
+
     @Query("DELETE FROM gallery")
     suspend fun clearAll()
 }

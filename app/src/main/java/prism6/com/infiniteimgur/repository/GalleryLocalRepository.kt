@@ -41,6 +41,20 @@ class GalleryLocalRepository constructor() {
         }
     }
 
+    fun insertAll(page: Int, galleryModels: List<GalleryModel>) {
+
+        galleryDB = initializeDB(context)
+
+        var newGalleryList = galleryModels
+            .filter { !it.images.isNullOrEmpty() }
+            .filter { it.images!![0].type!!.contains("image/") }
+        newGalleryList.forEach { it.page = page }
+
+        CoroutineScope(IO).launch {
+            galleryDB!!.galleryDao().InsertAll(newGalleryList)
+        }
+    }
+
     fun getGalleryDetails(id: String): LiveData<GalleryModel> {
 
         galleryDB = initializeDB(context)
@@ -61,5 +75,12 @@ class GalleryLocalRepository constructor() {
         galleryDB = initializeDB(context)
 
         return galleryDB!!.galleryDao().getGallerys()
+    }
+
+    fun getGallerys(page: Int): LiveData<List<GalleryModel>> {
+
+        galleryDB = initializeDB(context)
+
+        return galleryDB!!.galleryDao().getGallerys(page)
     }
 }

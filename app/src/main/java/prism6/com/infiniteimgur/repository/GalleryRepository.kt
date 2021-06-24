@@ -18,9 +18,9 @@ class GalleryRepository @Inject constructor(
     )
 
     fun getGallerys(page : Int) = get(
-        db = { galleryLocalRepository.getGallerys() },
+        db = { galleryLocalRepository.getGallerys(page) },
         call = { galleryRemoteRepository.getGallerys(page) },
-        result = { galleryLocalRepository.insertAll(it.data) }
+        result = { galleryLocalRepository.insertAll(page, it.data) }
     )
 
     fun clearLocalCache(){
