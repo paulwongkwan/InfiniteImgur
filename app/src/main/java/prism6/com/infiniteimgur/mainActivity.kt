@@ -107,7 +107,11 @@ class mainActivity : AppCompatActivity() {
                     if (isLoading) {
                         // hide your progress bar
                         loadingBox.visibility = View.GONE
+                    }else{
+                        loadingBox.visibility = View.VISIBLE
                     }
+                }else{
+                    loadingBox.visibility = View.VISIBLE
                 }
             })
 
@@ -115,12 +119,13 @@ class mainActivity : AppCompatActivity() {
             if (!::adapter.isInitialized) {
                 adapter = MainGalleryAdapter(galleryViewModel)
                 fullscreenContent.adapter = adapter
+                fullscreenContent.setHasFixedSize(true)
                 fullscreenContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
 
-                        if(!recyclerView.canScrollVertically(1)){
-                            galleryViewModel.update()
+                        if (!recyclerView.canScrollVertically(1) && galleryViewModel.isLoading.value == true) {
+                            galleryViewModel.page.value = galleryViewModel.page.value!! + 1
                         }
                     }
                 })
@@ -134,14 +139,18 @@ class mainActivity : AppCompatActivity() {
         galleryViewModel.isLoading.value = false
         galleryViewModel.galleryPage.observe(this, Observer {
             if (it.status == Resource.Status.SUCCESS) {
-                galleryViewModel.isLoading.value = true
                 val dataSize = it.data!!.size
-                if(dataSize > 0) {
+                if (dataSize > 0) {
                     val size = galleryViewModel.galleryList.value?.size
                     galleryViewModel.galleryList.value?.addAll(it.data!!)
                     adapter.notifyItemRangeInserted(size!!, dataSize)
-                    galleryViewModel.page++
+                    galleryViewModel.isLoading.value = true
+//                    galleryViewModel.page.value = galleryViewModel.page.value!! + 1
                 }
+            }else if (it.status == Resource.Status.LOADING){
+                galleryViewModel.isLoading.value = false
+            }else if (it.status == Resource.Status.ERROR){
+                galleryViewModel.isLoading.value = true
             }
         })
     }

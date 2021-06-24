@@ -21,10 +21,12 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class GalleryViewModel : ViewModel() {
     private val repository: GalleryRepository = mApplication.instance.repository
+    var page = MutableLiveData(0)
     var gallerys: LiveData<Resource<List<GalleryModel>>> = repository.getGallerys()
-    var galleryPage: LiveData<Resource<List<GalleryModel>>>
-    var isLoading = MutableLiveData<Boolean>()
-    var page = 0
+    var galleryPage: LiveData<Resource<List<GalleryModel>>> = Transformations.switchMap(page){
+        repository.getGallerys(it)
+    }
+    var isLoading = MutableLiveData(false)
     var galleryList = MutableLiveData<CopyOnWriteArrayList<GalleryModel>>(CopyOnWriteArrayList())
 
     val empty: LiveData<Boolean> = Transformations.map(gallerys) {
@@ -33,11 +35,7 @@ class GalleryViewModel : ViewModel() {
 
     init {
         repository.clearLocalCache()
-        galleryPage = repository.getGallerys(page)
-    }
-
-    fun update(){
-        galleryPage = repository.getGallerys(page)
+//        galleryPage = repository.getGallerys(page.value!!)
     }
 
     fun click(view: View, url:String) {

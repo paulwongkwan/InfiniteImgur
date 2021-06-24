@@ -13,6 +13,7 @@ class GalleryModel(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "key") val key: Int,
     @SerializedName("id") val id: String,
     @SerializedName("title") val title: String,
+    @SerializedName("page") var page: Int?,
 //	@SerializedName("description") val description : String,
 //	@SerializedName("datetime") val datetime : Int,
 //    @SerializedName("type") val type: String,
